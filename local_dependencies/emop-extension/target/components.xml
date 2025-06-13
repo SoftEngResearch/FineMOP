@@ -1,0 +1,11 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.apache.maven.AbstractMavenLifecycleParticipant</role>
+      <role-hint>emop</role-hint>
+      <implementation>edu.cornell.extension.EMOPExtension</implementation>
+      <description></description>
+      <isolated-realm>false</isolated-realm>
+    </component>
+  </components>
+</component-set>
