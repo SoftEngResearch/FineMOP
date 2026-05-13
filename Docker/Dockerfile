@@ -1,9 +1,6 @@
 # Use Ubuntu 22.04 LTS as the base image.
 FROM ubuntu:22.04
 
-# TODO: Remove when submitting artifacts.
-ARG GITHUB_ACCESS_TOKEN
-
 RUN apt-get update
 RUN \
   DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-common && \
@@ -32,11 +29,11 @@ WORKDIR /root
 # Use OpenJDK 8 when building the docker image
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk
 
-# Install Maven 3.9.10 locally for user
+# Install Maven 3.9.15 locally for user
 RUN \
-  wget https://dlcdn.apache.org/maven/maven-3/3.9.10/binaries/apache-maven-3.9.10-bin.tar.gz && \
-  tar -xzf apache-maven-3.9.10-bin.tar.gz && mv apache-maven-3.9.10/ apache-maven/ && \
-  rm apache-maven-3.9.10-bin.tar.gz && \
+  wget https://dlcdn.apache.org/maven/maven-3/3.9.15/binaries/apache-maven-3.9.15-bin.tar.gz && \
+  tar -xzf apache-maven-3.9.15-bin.tar.gz && mv apache-maven-3.9.15/ apache-maven/ && \
+  rm apache-maven-3.9.15-bin.tar.gz && \
   cd ~/ && \
 # Set up the user's configurations
   wget https://github.com/eclipse-aspectj/aspectj/releases/download/V1_9_7/aspectj-1.9.7.jar && \
@@ -58,6 +55,6 @@ ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US.UTF-8
 
-RUN git clone "https://$GITHUB_ACCESS_TOKEN@github.com/SoftEngResearch/finemop-tmp" finemop
+RUN git clone "https://github.com/SoftEngResearch/finemop" finemop
 
 RUN bash finemop/scripts/setup.sh /root/env
