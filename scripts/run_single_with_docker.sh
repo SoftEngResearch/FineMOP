@@ -14,6 +14,7 @@ while getopts :i:l: opts; do
     esac
 done
 shift $((${OPTIND} - 1))
+SCRIPT_DIR=$( cd $( dirname $0 ) && pwd )
 
 PROJECT_URL=$1
 STATS=$2
@@ -38,6 +39,9 @@ function run_single_with_docker {
     docker exec -w /root/env/starts -e PATH=/root/apache-maven/bin:/usr/lib/jvm/java-8-openjdk/bin:/root/aspectj-1.9.7/bin:/root/aspectj-1.9.7/lib/aspectjweaver.jar:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin -e JAVA_HOME=/usr/lib/jvm/java-8-openjdk -e CLASSPATH=/root/aspectj-1.9.7/lib/aspectjtools.jar:/root/aspectj-1.9.7/lib/aspectjrt.jar:/root/aspectj-1.9.7/lib/aspectjweaver.jar: "${id}" mvn install -Dcheckstyle.skip -Drat.skip -Denforcer.skip -Danimal.sniffer.skip -Dmaven.javadoc.skip -Dfindbugs.skip -Dwarbucks.skip -Dmodernizer.skip -Dimpsort.skip -Dpmd.skip -Dxjc.skip -Djacoco.skip -Dinvoker.skip -DskipDocs -DskipITs -Dbuildhelper.uptodateproperty.skip -Dbuildhelper.uptodateproperties.skip -Dcheckstyle.skip -DskipTests --no-transfer-progress -Dmaven.repo.local=/root/env/repo &>> "${LOGS_DIR}/${project_name}.txt"
     # Install emop and finemop.
     docker exec -w /root/env/emop -e PATH=/root/apache-maven/bin:/usr/lib/jvm/java-8-openjdk/bin:/root/aspectj-1.9.7/bin:/root/aspectj-1.9.7/lib/aspectjweaver.jar:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin -e JAVA_HOME=/usr/lib/jvm/java-8-openjdk -e CLASSPATH=/root/aspectj-1.9.7/lib/aspectjtools.jar:/root/aspectj-1.9.7/lib/aspectjrt.jar:/root/aspectj-1.9.7/lib/aspectjweaver.jar: "${id}" mvn install -Dcheckstyle.skip -Drat.skip -Denforcer.skip -Danimal.sniffer.skip -Dmaven.javadoc.skip -Dfindbugs.skip -Dwarbucks.skip -Dmodernizer.skip -Dimpsort.skip -Dpmd.skip -Dxjc.skip -Djacoco.skip -Dinvoker.skip -DskipDocs -DskipITs -Dbuildhelper.uptodateproperty.skip -Dbuildhelper.uptodateproperties.skip -Dcheckstyle.skip -DskipTests --no-transfer-progress -Dmaven.repo.local=/root/env/repo &>> "${LOGS_DIR}/${project_name}.txt"
+    if [[ -f ${SCRIPT_DIR}/../data/revisions/${project_name}.txt ]]; then
+      docker cp ${SCRIPT_DIR}/../data/revisions/${project_name}.txt "${id}:/root/finemop/data/revisions/${project_name}.txt"
+    fi
     if [[ -n ${RUN_CONFIGS} ]]; then
       # Docker command specifying environment variables and script to run.
       docker exec -w /root/finemop/scripts -e PATH=/root/apache-maven/bin:/usr/lib/jvm/java-8-openjdk/bin:/root/aspectj-1.9.7/bin:/root/aspectj-1.9.7/lib/aspectjweaver.jar:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin -e JAVA_HOME=/usr/lib/jvm/java-8-openjdk -e CLASSPATH=/root/aspectj-1.9.7/lib/aspectjtools.jar:/root/aspectj-1.9.7/lib/aspectjrt.jar:/root/aspectj-1.9.7/lib/aspectjweaver.jar: "${id}" bash run_experiment.sh -c "${RUN_CONFIGS}" -l "${USE_THIRD_PARTY}" "${project_url}" "${stats}" "${max_revs}" >> "${LOGS_DIR}/${project_name}.txt" 2>&1
