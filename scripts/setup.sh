@@ -48,6 +48,10 @@ function setup_environment {
     cd ${ENV_DIR}
     git clone https://github.com/SoftEngResearch/tracemop
 
+    cd tracemop
+    git checkout 3de76a81606fce70e893ab305320b310a614438a
+    cd ..
+
     cd ${ENV_DIR}/tracemop/scripts
     bash install.sh false true
     mv no-track-stats-agent.jar ${ENV_DIR}/agents
