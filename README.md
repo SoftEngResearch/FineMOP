@@ -38,7 +38,7 @@ docker build -f Docker/Dockerfile . --tag=finemop
 
 ### Run experiment
 
-Execute the following command to run FineMOP experiment on a sample project list containing only 1 project with at most 20 revisions using eMOP, all algorithms in FineMOP, as well as Maven test and JavaMOP for each revision.
+Execute the following command to run FineMOP experiment on a sample project list containing only 1 project with at most 20 revisions using eMOP, all algorithms in FineMOP, as well as Maven test and JavaMOP for each revision. You can find the projects' revisions in [this directory](data/revisions).
 
 ```bash
 cd scripts
